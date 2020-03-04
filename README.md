@@ -11,7 +11,7 @@ Ascenseur du commissariat de Vespucci
 
 ### Screenshot
 
-![screenshot](https://prnt.sc/rbpn4y.png)
+![screenshot](https://imgur.com/37p1ju1.png)
 
 # Download & Installation
 
