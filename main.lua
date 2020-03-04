@@ -5,6 +5,17 @@ Citizen.CreateThread(function()													--Permets le point
     TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
     Citizen.Wait(0)
     end
+
+    while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(10)
+	end
+
+	ESX.PlayerData = ESX.GetPlayerData()
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+	ESX.PlayerData.job = job
 end)
 
 function notify(text)															--Permets les notifications
@@ -28,7 +39,7 @@ function Ascenseur1Menu(menu)													--Ascenseur N°1 Niveau -1
 
 	local asc1niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc1niveaum3)
-	asc1niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc1niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc1niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc1niveaum2)
@@ -89,7 +100,7 @@ function Ascenseur2Menu(menu)													--Ascenseur N°1 Niveau -2
 
 	local asc1niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc1niveaum3)
-	asc1niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc1niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc1niveaum1 = NativeUI.CreateItem("Niveau -1","")
 	menu:AddItem(asc1niveaum1)
@@ -152,7 +163,7 @@ function Ascenseur3Menu(menu)													--Ascenseur N°1 Niveau -3
 	menu:AddItem(asc1niveaum2)
 	asc1niveaum2:RightLabel("~p~Labaratoire | Stockage")
 
-	local asc1niveaum1 = NativeUI.CreateItem("Niveau -2","")
+	local asc1niveaum1 = NativeUI.CreateItem("Niveau -1","")
 	menu:AddItem(asc1niveaum1)
 	asc1niveaum1:RightLabel("~p~Cellule | Garage")
 
@@ -207,7 +218,7 @@ function Ascenseur4Menu(menu)													--Ascenseur N°1 Niveau 1
 
 	local asc1niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc1niveaum3)
-	asc1niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc1niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc1niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc1niveaum2)
@@ -268,7 +279,7 @@ function Ascenseur5Menu(menu)													--Ascenseur N°1 Niveau 3
 
 	local asc1niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc1niveaum3)
-	asc1niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc1niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc1niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc1niveaum2)
@@ -341,7 +352,7 @@ function Ascenseur6Menu(menu)													--Ascenseur N°2 Niveau -1
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -349,7 +360,7 @@ function Ascenseur6Menu(menu)													--Ascenseur N°2 Niveau -1
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -411,22 +422,30 @@ function Ascenseur6Menu(menu)													--Ascenseur N°2 Niveau -1
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 	end
 end
@@ -450,7 +469,7 @@ function Ascenseur7Menu(menu)													--Ascenseur N°2 Niveau -2
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -458,7 +477,7 @@ function Ascenseur7Menu(menu)													--Ascenseur N°2 Niveau -2
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum1 = NativeUI.CreateItem("Niveau -1","")
 	menu:AddItem(asc2niveaum1)
@@ -520,13 +539,17 @@ function Ascenseur7Menu(menu)													--Ascenseur N°2 Niveau -2
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -559,7 +582,7 @@ function Ascenseur8Menu(menu)													--Ascenseur N°2 Niveau -3
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -629,13 +652,17 @@ function Ascenseur8Menu(menu)													--Ascenseur N°2 Niveau -3
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -668,11 +695,11 @@ function Ascenseur9Menu(menu)													--Ascenseur N°2 Niveau 1
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -729,22 +756,30 @@ function Ascenseur9Menu(menu)													--Ascenseur N°2 Niveau 1
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -758,7 +793,7 @@ function Ascenseur9Menu(menu)													--Ascenseur N°2 Niveau 1
 	end
 end
 
-function Ascenseurv0Menu(menu)													--Ascenseur N°2 Niveau 2
+function Ascenseur10Menu(menu)													--Ascenseur N°2 Niveau 2
 	local asc2niveau6 = NativeUI.CreateItem("Niveau 6","")
 	menu:AddItem(asc2niveau6)
 	asc2niveau6:RightLabel("~p~Hélipad")
@@ -781,7 +816,7 @@ function Ascenseurv0Menu(menu)													--Ascenseur N°2 Niveau 2
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -838,22 +873,30 @@ function Ascenseurv0Menu(menu)													--Ascenseur N°2 Niveau 2
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -867,7 +910,7 @@ function Ascenseurv0Menu(menu)													--Ascenseur N°2 Niveau 2
 	end
 end
 
-function Ascenseurv1Menu(menu)													--Ascenseur N°2 Niveau 3
+function Ascenseur11Menu(menu)													--Ascenseur N°2 Niveau 3
 	local asc2niveau6 = NativeUI.CreateItem("Niveau 6","")
 	menu:AddItem(asc2niveau6)
 	asc2niveau6:RightLabel("~p~Hélipad")
@@ -882,7 +925,7 @@ function Ascenseurv1Menu(menu)													--Ascenseur N°2 Niveau 3
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -890,7 +933,7 @@ function Ascenseurv1Menu(menu)													--Ascenseur N°2 Niveau 3
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -947,22 +990,30 @@ function Ascenseurv1Menu(menu)													--Ascenseur N°2 Niveau 3
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -976,7 +1027,7 @@ function Ascenseurv1Menu(menu)													--Ascenseur N°2 Niveau 3
 	end
 end
 
-function Ascenseurv2Menu(menu)													--Ascenseur N°2 Niveau 4
+function Ascenseur12Menu(menu)													--Ascenseur N°2 Niveau 4
 	local asc2niveau6 = NativeUI.CreateItem("Niveau 6","")
 	menu:AddItem(asc2niveau6)
 	asc2niveau6:RightLabel("~p~Hélipad")
@@ -991,7 +1042,7 @@ function Ascenseurv2Menu(menu)													--Ascenseur N°2 Niveau 4
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -999,7 +1050,7 @@ function Ascenseurv2Menu(menu)													--Ascenseur N°2 Niveau 4
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -1056,22 +1107,30 @@ function Ascenseurv2Menu(menu)													--Ascenseur N°2 Niveau 4
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -1085,7 +1144,7 @@ function Ascenseurv2Menu(menu)													--Ascenseur N°2 Niveau 4
 	end
 end
 
-function Ascenseurv3Menu(menu)													--Ascenseur N°2 Niveau 5
+function Ascenseur13Menu(menu)													--Ascenseur N°2 Niveau 5
 	local asc2niveau6 = NativeUI.CreateItem("Niveau 6","")
 	menu:AddItem(asc2niveau6)
 	asc2niveau6:RightLabel("~p~Hélipad")
@@ -1100,7 +1159,7 @@ function Ascenseurv3Menu(menu)													--Ascenseur N°2 Niveau 5
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -1108,7 +1167,7 @@ function Ascenseurv3Menu(menu)													--Ascenseur N°2 Niveau 5
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -1164,22 +1223,30 @@ function Ascenseurv3Menu(menu)													--Ascenseur N°2 Niveau 5
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -1193,7 +1260,7 @@ function Ascenseurv3Menu(menu)													--Ascenseur N°2 Niveau 5
 	end
 end
 
-function Ascenseurv4Menu(menu)													--Ascenseur N°2 Niveau 6
+function Ascenseur14Menu(menu)													--Ascenseur N°2 Niveau 6
 	local asc2niveau5 = NativeUI.CreateItem("Niveau 5","")
 	menu:AddItem(asc2niveau5)
 	asc2niveau5:RightLabel("~p~Bureaux")
@@ -1208,7 +1275,7 @@ function Ascenseurv4Menu(menu)													--Ascenseur N°2 Niveau 6
 
 	local asc2niveau2 = NativeUI.CreateItem("Niveau 2","")
 	menu:AddItem(asc2niveau2)
-	asc2niveau2:RightLabel("~p~Cafe | Sheriff")
+	asc2niveau2:RightLabel("~p~Cafétéria")
 
 	local asc2niveau1 = NativeUI.CreateItem("Niveau 1","")
 	menu:AddItem(asc2niveau1)
@@ -1216,7 +1283,7 @@ function Ascenseurv4Menu(menu)													--Ascenseur N°2 Niveau 6
 
 	local asc2niveaum3 = NativeUI.CreateItem("Niveau -3","")
 	menu:AddItem(asc2niveaum3)
-	asc2niveaum3:RightLabel("~p~Garge | Armurerie")
+	asc2niveaum3:RightLabel("~p~Garage | Armurerie")
 
 	local asc2niveaum2 = NativeUI.CreateItem("Niveau -2","")
 	menu:AddItem(asc2niveaum2)
@@ -1273,22 +1340,30 @@ function Ascenseurv4Menu(menu)													--Ascenseur N°2 Niveau 6
 			_menuPool:CloseAllMenus()
 		end
 		if item == asc2niveaum3 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -3~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 12.69)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -3~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum2 then
-			DoScreenFadeOut(100)
-			Citizen.Wait(250)
-			SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
-			Citizen.Wait(250)
-			DoScreenFadeIn(250)
-			notify("Vous êtes arrivez au ~g~niveau -2~w~.")
-			_menuPool:CloseAllMenus()
+			if ESX.PlayerData.job.name == 'police' then
+				DoScreenFadeOut(100)
+				Citizen.Wait(250)
+				SetEntityCoords(PlayerPedId(), -1096.298, -850.076, 9.28)
+				Citizen.Wait(250)
+				DoScreenFadeIn(250)
+				notify("Vous êtes arrivez au ~g~niveau -2~w~.")
+				_menuPool:CloseAllMenus()
+			else
+				notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+			end
 		end
 		if item == asc2niveaum1 then
 			DoScreenFadeOut(100)
@@ -1306,23 +1381,43 @@ function AscenseurMenu()
 	local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveaum1vepd1.x, Config.niveaum1vepd1.y, Config.niveaum1vepd1.z) <= 1.2 then		--Ascenseur N°1 Niveau -3
-		Ascenseur1Menu(mainMenu)
+		if ESX.PlayerData.job.name == 'police' then
+			Ascenseur1Menu(mainMenu)
+		else
+			notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+		end
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveaum2vepd1.x, Config.niveaum2vepd1.y, Config.niveaum2vepd1.z) <= 1.2 then		--Ascenseur N°1 Niveau -2
-		Ascenseur2Menu(mainMenu)
+		if ESX.PlayerData.job.name == 'police' then
+			Ascenseur2Menu(mainMenu)
+		else
+			notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+		end
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveaum3vepd1.x, Config.niveaum3vepd1.y, Config.niveaum3vepd1.z) <= 1.2 then		--Ascenseur N°1 Niveau -1
-		Ascenseur3Menu(mainMenu)
+		if ESX.PlayerData.job.name == 'police' then
+			Ascenseur3Menu(mainMenu)
+		else
+			notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+		end
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau1vepd1.x, Config.niveau1vepd1.y, Config.niveau1vepd1.z) <= 1.2 then		--Ascenseur N°1 Niveau 1
-		Ascenseur4Menu(mainMenu)
+		if ESX.PlayerData.job.name == 'police' then
+			Ascenseur4Menu(mainMenu)
+		else
+			notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+		end
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau3vepd1.x, Config.niveau3vepd1.y, Config.niveau3vepd1.z) <= 1.2 then		--Ascenseur N°1 Niveau 3
-		Ascenseur5Menu(mainMenu)
+		if ESX.PlayerData.job.name == 'police' then
+			Ascenseur5Menu(mainMenu)
+		else
+			notify("Vous n'avez pas ~r~le badge d'accès~w~.")
+		end
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveaum1vepd2.x, Config.niveaum1vepd2.y, Config.niveaum1vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau -3
@@ -1342,23 +1437,23 @@ function AscenseurMenu()
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau2vepd2.x, Config.niveau2vepd2.y, Config.niveau2vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau 2
-		Ascenseurv0Menu(mainMenu)
+		Ascenseur10Menu(mainMenu)
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau3vepd2.x, Config.niveau3vepd2.y, Config.niveau3vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau 3
-		Ascenseurv1Menu(mainMenu)
+		Ascenseur11Menu(mainMenu)
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau4vepd2.x, Config.niveau4vepd2.y, Config.niveau4vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau 4
-		Ascenseurv2Menu(mainMenu)
+		Ascenseur12Menu(mainMenu)
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau5vepd2.x, Config.niveau5vepd2.y, Config.niveau5vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau 5
-		Ascenseurv3Menu(mainMenu)
+		Ascenseur13Menu(mainMenu)
 	end
 
 	if Vdist(plyCoords.x, plyCoords.y, plyCoords.z, Config.niveau6vepd2.x, Config.niveau6vepd2.y, Config.niveau6vepd2.z) <= 1.2 then		--Ascenseur N°2 Niveau 6
-		Ascenseurv4Menu(mainMenu)
+		Ascenseur14Menu(mainMenu)
 	end
 
 	_menuPool:RefreshIndex()
